@@ -3,71 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مستخرج بيانات العملاء | Lead Finder Pro</title>
+    <title>Lead Finder Pro | نظام مبيعات أحمد</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
-        body { font-family: 'Cairo', sans-serif; background-color: #f1f5f9; }
-        .hero-bg { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); }
+        body { font-family: 'Cairo', sans-serif; background-color: #0f172a; color: white; }
+        .glass-card { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); }
     </style>
 </head>
-<body>
-
-    <nav class="bg-white border-b border-gray-200 p-4 sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <div class="flex items-center gap-2">
-                <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-xl">L</div>
-                <span class="text-xl font-bold text-gray-800 tracking-tight">Lead Finder <span class="text-blue-600">Pro</span></span>
-            </div>
-            <div class="hidden md:block">
-                <span class="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-sm font-bold border border-blue-100">لوحة مبيعات - أحمد</span>
-            </div>
+<body class="min-h-screen">
+    <nav class="p-6 border-b border-gray-800 flex justify-between items-center bg-slate-900">
+        <div class="flex items-center gap-3">
+            <div class="bg-blue-600 p-2 rounded-lg font-bold text-xl">LF</div>
+            <h1 class="text-xl font-bold">Lead Finder <span class="text-blue-500">Pro</span></h1>
         </div>
+        <div class="bg-slate-800 px-4 py-1 rounded-full text-xs font-bold border border-slate-700">مرحباً صديقي أحمد</div>
     </nav>
 
-    <header class="hero-bg text-white py-20 px-4 shadow-inner">
-        <div class="max-w-4xl mx-auto text-center">
-            <h1 class="text-4xl md:text-5xl font-extrabold mb-6 leading-tight">استخراج بيانات الموظفين بذكاء</h1>
-            <p class="text-lg mb-10 text-gray-300">أدخل اسم الشركة لجلب قائمة صانعي القرار، المسميات الوظيفية، والبريد الإلكتروني من LinkedIn و Google.</p>
-            
-            <div class="bg-white p-3 rounded-2xl shadow-2xl flex flex-col md:flex-row gap-3">
-                <input type="text" id="companyInput" placeholder="اكتب اسم الشركة (مثال: Aramco أو STC)" class="flex-1 px-6 py-4 text-gray-800 rounded-xl focus:outline-none text-lg border border-gray-100">
-                <button onclick="runDiscovery()" class="bg-blue-600 hover:bg-blue-700 text-white px-12 py-4 rounded-xl font-bold transition-all transform hover:scale-105 shadow-lg">
-                    بحث متقدم
-                </button>
-            </div>
+    <header class="max-w-4xl mx-auto py-16 px-4 text-center">
+        <h2 class="text-4xl font-extrabold mb-4">استخرج بيانات الموظفين فوراً</h2>
+        <p class="text-slate-400 text-lg mb-8">أدخل رابط موقع الشركة (مثل: aramco.com) لجلب قائمة صانعي القرار.</p>
+        <div class="flex flex-col md:flex-row gap-3 p-2 bg-slate-800 rounded-2xl border border-slate-700 shadow-2xl">
+            <input type="text" id="companyInput" placeholder="اكتب موقع الشركة (مثلاً: flynas.com)" class="flex-1 bg-transparent px-6 py-4 text-white outline-none text-lg">
+            <button onclick="runDiscovery()" class="bg-blue-600 hover:bg-blue-700 text-white px-10 py-4 rounded-xl font-bold transition-all shadow-lg active:scale-95">بدء البحث</button>
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto py-12 px-4">
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-200">
-            <div class="p-6 border-b border-gray-100 flex flex-col md:flex-row justify-between items-center gap-4">
-                <h2 class="font-bold text-2xl text-gray-800">قائمة العملاء المحتملين</h2>
-                <button onclick="downloadExcel()" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-xl font-bold transition flex items-center gap-2">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                    استخراج إلى Excel
-                </button>
+    <main class="max-w-7xl mx-auto px-4 pb-20">
+        <div class="glass-card rounded-3xl overflow-hidden shadow-2xl">
+            <div class="p-6 border-b border-white/10 flex justify-between items-center bg-white/5">
+                <h3 class="font-bold text-xl">نتائج البحث المستخرجة</h3>
+                <button onclick="downloadExcel()" class="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-xl text-sm font-bold transition">تصدير Excel</button>
             </div>
-
-            <div class="overflow-x-auto">
-                <table class="w-full text-right border-collapse">
+            <div class="overflow-x-auto text-right">
+                <table id="leadsTable" class="w-full">
                     <thead>
-                        <tr class="bg-gray-50 text-gray-500 text-sm">
-                            <th class="p-5 font-bold border-b">الموظف</th>
-                            <th class="p-5 font-bold border-b">المسمى الوظيفي</th>
-                            <th class="p-5 font-bold border-b">البريد الإلكتروني</th>
-                            <th class="p-5 font-bold border-b">المنطقة</th>
-                            <th class="p-5 font-bold border-b">LinkedIn</th>
+                        <tr class="bg-white/5 text-slate-400 text-sm border-b border-white/10">
+                            <th class="p-5">الاسم</th>
+                            <th class="p-5">المنصب</th>
+                            <th class="p-5">البريد</th>
+                            <th class="p-5">الموقع</th>
+                            <th class="p-5">LinkedIn</th>
                         </tr>
                     </thead>
-                    <tbody id="resultsTable" class="text-gray-700 divide-y divide-gray-50">
-                        <tr>
-                            <td class="p-5 font-bold">بانتظار إدخال اسم الشركة...</td>
-                            <td class="p-5">---</td>
-                            <td class="p-5">---</td>
-                            <td class="p-5">---</td>
-                            <td class="p-5">---</td>
-                        </tr>
+                    <tbody id="resultsBody" class="divide-y divide-white/5">
+                        <tr><td colspan="5" class="p-20 text-center text-slate-500">أدخل اسم شركة لبدء سحب البيانات...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -75,19 +56,32 @@
     </main>
 
     <script>
-        function runDiscovery() {
-            const co = document.getElementById('companyInput').value;
-            if(!co) return alert('أدخل اسم الشركة أولاً');
-            
-            const table = document.getElementById('resultsTable');
-            table.innerHTML = `<tr><td colspan="5" class="p-10 text-center"><div class="animate-spin inline-block w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full"></div> <p class="mt-2 text-blue-600">جاري مسح الويب لجلب بيانات ${co}...</p></td></tr>`;
-
-            // الخطوة التالية هي ربط API حقيقي هنا
-            setTimeout(() => {
-                alert('الواجهة جاهزة! في الخطوة القادمة سنربطها بمحرك Apollo.io لجلب البيانات الحقيقية.');
-            }, 1500);
+        const API_KEY = 'Oqyp21WAE84O3w6XV3g0tg';
+        async function runDiscovery() {
+            const domain = document.getElementById('companyInput').value;
+            if(!domain) return alert('يرجى إدخال نطاق الشركة');
+            const body = document.getElementById('resultsBody');
+            body.innerHTML = '<tr><td colspan="5" class="p-20 text-center text-blue-400 animate-pulse">جاري جلب البيانات من Apollo...</td></tr>';
+            try {
+                const response = await fetch('https://api.apollo.io/v1/mixed_people/search', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'X-Api-Key': API_KEY },
+                    body: JSON.stringify({ q_organization_domains: domain, page: 1 })
+                });
+                const data = await response.json();
+                body.innerHTML = '';
+                if (data.people && data.people.length > 0) {
+                    data.people.forEach(p => {
+                        body.innerHTML += `<tr class="hover:bg-white/5 transition"><td class="p-5 font-bold border-b border-white/5">${p.name}</td><td class="p-5 text-blue-400 border-b border-white/5">${p.title || 'مسؤول'}</td><td class="p-5 text-sm border-b border-white/5">${p.email || 'محمي'}</td><td class="p-5 border-b border-white/5">${p.city || 'جدة'}</td><td class="p-5 border-b border-white/5"><a href="${p.linkedin_url}" target="_blank" class="text-blue-500 underline text-xs">الملف الشخصي</a></td></tr>`;
+                    });
+                } else { body.innerHTML = '<tr><td colspan="5" class="p-20 text-center text-red-400">لا توجد نتائج، تأكد من كتابة الدومين بشكل صحيح.</td></tr>'; }
+            } catch (err) { body.innerHTML = '<tr><td colspan="5" class="p-20 text-center text-red-500">حدث خطأ في الاتصال.</td></tr>'; }
         }
-        function downloadExcel() { alert('سيتم تصدير الجدول بصيغة Excel'); }
+        function downloadExcel() {
+            const table = document.getElementById("leadsTable");
+            const wb = XLSX.utils.table_to_book(table, { sheet: "Leads" });
+            XLSX.writeFile(wb, "Ahmad_Leads_Report.xlsx");
+        }
     </script>
 </body>
 </html>
