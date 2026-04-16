@@ -1,13 +1,121 @@
-async function runDiscovery() {
-    const domain = document.getElementById('companyInput').value;
-    if(!domain) return alert('يرجى إدخال اسم الشركة');
-    
-    // هذه الطريقة تفتح بحث جوجل مخصص للموظفين في تلك الشركة
-    const searchQuery = `site:linkedin.com/in/ "${domain}" "decision maker" OR "manager"`;
-    const googleSearchUrl = `https://www.google.com/search?q=${encodeURIComponent(searchQuery)}`;
-    
-    window.open(googleSearchUrl, '_blank');
-    
-    const body = document.getElementById('resultsBody');
-    body.innerHTML = '<tr><td colspan="5" class="p-20 text-blue-400 font-bold text-lg text-center">تم فتح نتائج البحث في نافذة جديدة...<br>ابحث عن صانعي القرار هناك!</td></tr>';
-}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lead Finder Pro | رادار مبيعات أحمد</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Cairo', sans-serif; background-color: #0f172a; color: white; overflow-x: hidden; }
+        .glass-card { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); }
+        .btn-glow:hover { box-shadow: 0 0 20px rgba(59, 130, 246, 0.5); transform: translateY(-2px); }
+        .animate-pulse-slow { animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+    </style>
+</head>
+<body class="min-h-screen bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-slate-900 via-blue-950 to-slate-900">
+
+    <nav class="p-6 border-b border-white/10 flex justify-between items-center glass-card sticky top-0 z-50">
+        <div class="flex items-center gap-3">
+            <div class="bg-blue-600 p-2 rounded-xl font-bold text-xl shadow-lg">LF</div>
+            <h1 class="text-xl font-bold tracking-tight">Lead Finder <span class="text-blue-500 font-extrabold italic">PRO</span></h1>
+        </div>
+        <div class="hidden md:block bg-slate-800/50 px-4 py-1 rounded-full text-xs border border-white/10 italic">
+            نظام البحث العالمي - خاص بصديقي أحمد
+        </div>
+    </nav>
+
+    <header class="max-w-4xl mx-auto py-20 px-4 text-center">
+        <div class="inline-block px-4 py-1 mb-6 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-sm font-bold animate-pulse-slow">
+            جاهز لصيد العملاء لـ Park Inn Jeddah 🚀
+        </div>
+        <h2 class="text-5xl font-extrabold mb-6 leading-tight">رادار البحث عن <span class="text-blue-500">صانعي القرار</span></h2>
+        <p class="text-slate-400 text-lg mb-10 max-w-2xl mx-auto">
+            ابحث في LinkedIn وكل ركن في الإنترنت عن مديري المشتريات، الموارد البشرية، ومنسقي الرحلات بضغطة زر.
+        </p>
+        
+        <div class="flex flex-col md:flex-row gap-4 p-3 bg-slate-900/80 rounded-3xl border border-white/10 shadow-2xl backdrop-blur-xl">
+            <input type="text" id="companyInput" placeholder="أدخل اسم الشركة أو الموقع (مثل: aramco.com)" 
+                   class="flex-1 bg-transparent px-6 py-4 text-white outline-none text-xl placeholder:text-slate-600">
+            <button onclick="globalSearch()" class="bg-blue-600 hover:bg-blue-700 text-white px-12 py-4 rounded-2xl font-bold transition-all btn-glow text-lg">
+                بدء البحث العالمي
+            </button>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 pb-32">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            
+            <div class="glass-card p-8 rounded-3xl hover:border-blue-500/50 transition-all group">
+                <div class="w-12 h-12 bg-blue-600/20 rounded-2xl flex items-center justify-center mb-6 text-blue-500 text-2xl group-hover:bg-blue-600 group-hover:text-white transition-all">
+                    in
+                </div>
+                <h3 class="text-xl font-bold mb-3">مديرو LinkedIn</h3>
+                <p class="text-slate-400 text-sm mb-6 leading-relaxed">ابحث عن مديري المشتريات والرحلات في الشركة المحددة عبر LinkedIn مباشرة.</p>
+                <button onclick="searchLinkedIn('Decision Maker')" class="w-full py-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 font-bold transition">فتح البحث</button>
+            </div>
+
+            <div class="glass-card p-8 rounded-3xl hover:border-green-500/50 transition-all group">
+                <div class="w-12 h-12 bg-green-600/20 rounded-2xl flex items-center justify-center mb-6 text-green-500 text-2xl group-hover:bg-green-600 group-hover:text-white transition-all">
+                    ✈️
+                </div>
+                <h3 class="text-xl font-bold mb-3">مسؤولو الرحلات</h3>
+                <p class="text-slate-400 text-sm mb-6 leading-relaxed">استهدف الأشخاص المسؤولين عن حجز الفنادق والرحلات (Corporate Travel) في الشركة.</p>
+                <button onclick="searchLinkedIn('Travel Manager')" class="w-full py-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 font-bold transition">فتح البحث</button>
+            </div>
+
+            <div class="glass-card p-8 rounded-3xl hover:border-purple-500/50 transition-all group">
+                <div class="w-12 h-12 bg-purple-600/20 rounded-2xl flex items-center justify-center mb-6 text-purple-500 text-2xl group-hover:bg-purple-600 group-hover:text-white transition-all">
+                    📧
+                </div>
+                <h3 class="text-xl font-bold mb-3">صائد الإيميلات</h3>
+                <p class="text-slate-400 text-sm mb-6 leading-relaxed">البحث عن نمط البريد الإلكتروني للشركة (مثل: name@company.com) في الويب.</p>
+                <button onclick="searchEmails()" class="w-full py-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 font-bold transition">بحث عن الإيميلات</button>
+            </div>
+
+        </div>
+
+        <div id="statusMessage" class="mt-12 p-6 glass-card rounded-2xl text-center hidden">
+            <p class="text-blue-400 font-bold" id="statusText"></p>
+        </div>
+    </main>
+
+    <script>
+        function getCompany() {
+            const domain = document.getElementById('companyInput').value.trim();
+            if(!domain) {
+                alert('صديقي أحمد، يرجى كتابة اسم الشركة أولاً (مثلاً: aramco.com)');
+                return null;
+            }
+            return domain;
+        }
+
+        function globalSearch() {
+            const domain = getCompany();
+            if(!domain) return;
+            
+            // فتح 3 نوافذ بحث ذكية في وقت واحد
+            searchLinkedIn('Procurement OR Travel OR HR');
+            setTimeout(() => searchEmails(), 500);
+            
+            const status = document.getElementById('statusMessage');
+            status.classList.remove('hidden');
+            document.getElementById('statusText').innerText = `جاري إطلاق الرادار للبحث عن: ${domain}... افحص النوافذ المنبثقة!`;
+        }
+
+        function searchLinkedIn(role) {
+            const domain = getCompany();
+            if(!domain) return;
+            const query = `site:linkedin.com/in/ "${domain}" "${role}"`;
+            window.open(`https://www.google.com/search?q=${encodeURIComponent(query)}`, '_blank');
+        }
+
+        function searchEmails() {
+            const domain = getCompany();
+            if(!domain) return;
+            const query = `"${domain}" email format OR "@${domain}"`;
+            window.open(`https://www.google.com/search?q=${encodeURIComponent(query)}`, '_blank');
+        }
+    </script>
+</body>
+</html>
