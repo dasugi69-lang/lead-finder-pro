@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lead Finder Pro | نظام مبيعات أحمد</title>
+    <title>Lead Finder Pro | مبيعات أحمد</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -15,40 +15,40 @@
 <body class="min-h-screen">
     <nav class="p-6 border-b border-gray-800 flex justify-between items-center bg-slate-900">
         <div class="flex items-center gap-3">
-            <div class="bg-blue-600 p-2 rounded-lg font-bold text-xl">LF</div>
-            <h1 class="text-xl font-bold italic">Lead Finder <span class="text-blue-500">Pro</span></h1>
+            <div class="bg-blue-600 p-2 rounded-lg font-bold text-xl shadow-lg">LF</div>
+            <h1 class="text-xl font-bold tracking-tight">Lead Finder <span class="text-blue-500">Pro</span></h1>
         </div>
-        <div class="bg-slate-800 px-4 py-1 rounded-full text-xs font-bold border border-slate-700">مرحباً صديقي أحمد</div>
+        <div class="bg-slate-800 px-4 py-1 rounded-full text-xs font-bold border border-slate-700 italic">مرحباً صديقي أحمد</div>
     </nav>
 
     <header class="max-w-4xl mx-auto py-16 px-4 text-center">
         <h2 class="text-4xl font-extrabold mb-4">استخرج بيانات الموظفين فوراً</h2>
-        <p class="text-slate-400 text-lg mb-8 italic">أدخل رابط الموقع (مثلاً: dhl.com) لجلب قائمة صانعي القرار لـ Park Inn.</p>
+        <p class="text-slate-400 text-lg mb-8 italic">أدخل رابط موقع الشركة (مثل: aramex.com) لجلب قائمة صانعي القرار لـ Park Inn.</p>
         <div class="flex flex-col md:flex-row gap-3 p-2 bg-slate-800 rounded-2xl border border-slate-700 shadow-2xl">
-            <input type="text" id="companyInput" placeholder="اكتب موقع الشركة (مثلاً: dhl.com)" class="flex-1 bg-transparent px-6 py-4 text-white outline-none text-lg">
+            <input type="text" id="companyInput" placeholder="اكتب موقع الشركة هنا (مثلاً: aramex.com)" class="flex-1 bg-transparent px-6 py-4 text-white outline-none text-lg">
             <button onclick="runDiscovery()" class="bg-blue-600 hover:bg-blue-700 text-white px-10 py-4 rounded-xl font-bold transition-all shadow-lg active:scale-95">بدء البحث الذكي</button>
         </div>
     </header>
 
     <main class="max-w-7xl mx-auto px-4 pb-20">
         <div class="glass-card rounded-3xl overflow-hidden shadow-2xl">
-            <div class="p-6 border-b border-white/10 flex justify-between items-center bg-white/5">
+            <div class="p-6 border-b border-white/10 flex justify-between items-center bg-white/5 text-center">
                 <h3 class="font-bold text-xl">نتائج البحث المستخرجة</h3>
                 <button onclick="downloadExcel()" class="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-xl text-sm font-bold transition">تصدير Excel</button>
             </div>
-            <div class="overflow-x-auto text-right">
-                <table id="leadsTable" class="w-full text-sm">
+            <div class="overflow-x-auto">
+                <table id="leadsTable" class="w-full text-center">
                     <thead>
                         <tr class="bg-white/5 text-slate-400 border-b border-white/10">
-                            <th class="p-5 text-center">الاسم</th>
-                            <th class="p-5 text-center">المنصب</th>
-                            <th class="p-5 text-center">البريد</th>
-                            <th class="p-5 text-center">الموقع</th>
-                            <th class="p-5 text-center">LinkedIn</th>
+                            <th class="p-5 font-bold">الاسم</th>
+                            <th class="p-5 font-bold">المنصب الوظيفي</th>
+                            <th class="p-5 font-bold">البريد الإلكتروني</th>
+                            <th class="p-5 font-bold">الموقع</th>
+                            <th class="p-5 font-bold">LinkedIn</th>
                         </tr>
                     </thead>
-                    <tbody id="resultsBody" class="divide-y divide-white/5 text-center">
-                        <tr><td colspan="5" class="p-20 text-slate-500">بانتظار إدخال اسم الشركة...</td></tr>
+                    <tbody id="resultsBody" class="divide-y divide-white/5">
+                        <tr><td colspan="5" class="p-20 text-slate-500">أدخل اسم شركة لبدء سحب البيانات...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -56,7 +56,6 @@
     </main>
 
     <script>
-        // مفتاحك الخاص
         const API_KEY = 'Oqyp21WAE84O3w6XV3g0tg';
 
         async function runDiscovery() {
@@ -64,11 +63,14 @@
             if(!domain) return alert('يرجى إدخال نطاق الشركة');
             
             const body = document.getElementById('resultsBody');
-            body.innerHTML = '<tr><td colspan="5" class="p-20 text-blue-400 animate-pulse font-bold">جاري كسر الحواجز وجلب البيانات...</td></tr>';
+            body.innerHTML = '<tr><td colspan="5" class="p-20 text-blue-400 animate-pulse font-bold">جاري الاتصال بقاعدة بيانات Apollo...</td></tr>';
 
             try {
-                // استخدام CORS Proxy لتجاوز مشاكل الاتصال
-                const response = await fetch('https://api.apollo.io/v1/mixed_people/search', {
+                // استخدام وسيط لتجنب مشاكل الحماية (CORS Proxy)
+                const proxyUrl = 'https://api.allorigins.win/raw?url=';
+                const targetUrl = 'https://api.apollo.io/v1/mixed_people/search';
+                
+                const response = await fetch(proxyUrl + encodeURIComponent(targetUrl), {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -76,12 +78,11 @@
                     },
                     body: JSON.stringify({
                         q_organization_domains: domain,
-                        page: 1,
-                        display_mode: "regular"
+                        page: 1
                     })
                 });
 
-                if (!response.ok) throw new Error('فشل في استجابة الخادم');
+                if (!response.ok) throw new Error();
 
                 const data = await response.json();
                 body.innerHTML = '';
@@ -90,26 +91,25 @@
                     data.people.forEach(p => {
                         body.innerHTML += `
                             <tr class="hover:bg-white/5 transition">
-                                <td class="p-5 font-bold">${p.first_name} ${p.last_name}</td>
-                                <td class="p-5 text-blue-400 font-medium">${p.title || 'مسؤول'}</td>
-                                <td class="p-5 text-slate-300 text-xs">${p.email || 'تواصل عبر LinkedIn'}</td>
-                                <td class="p-5 text-slate-400">${p.city || 'غير محدد'}</td>
-                                <td class="p-5"><a href="${p.linkedin_url}" target="_blank" class="text-blue-500 hover:underline">الملف الشخصي</a></td>
+                                <td class="p-5 font-bold border-b border-white/5">${p.name}</td>
+                                <td class="p-5 text-blue-400 border-b border-white/5">${p.title || 'مسؤول'}</td>
+                                <td class="p-5 text-sm border-b border-white/5 text-slate-300">${p.email || 'تواصل عبر LinkedIn'}</td>
+                                <td class="p-5 border-b border-white/5 text-slate-400">${p.city || 'غير محدد'}</td>
+                                <td class="p-5 border-b border-white/5"><a href="${p.linkedin_url}" target="_blank" class="text-blue-500 underline text-xs">الملف الشخصي</a></td>
                             </tr>`;
                     });
                 } else {
-                    body.innerHTML = '<tr><td colspan="5" class="p-20 text-red-400 font-bold">لم يتم العثور على موظفين. تأكد من كتابة dhl.com وليس DHL فقط.</td></tr>';
+                    body.innerHTML = '<tr><td colspan="5" class="p-20 text-red-400">لا توجد نتائج لهذا الدومين. جرب نطاقاً آخر.</td></tr>';
                 }
             } catch (err) {
-                console.error(err);
-                body.innerHTML = '<tr><td colspan="5" class="p-20 text-red-500 font-bold text-lg">⚠️ حدثت مشكلة في الاتصال بمحرك Apollo.<br><span class="text-xs text-slate-400 font-normal">تأكد من أنك لم تتجاوز حد البحث المجاني اليومي في Apollo.</span></td></tr>';
+                body.innerHTML = '<tr><td colspan="5" class="p-20 text-red-500 font-bold">حدث خطأ في جلب البيانات. تأكد من أن الموقع dhl.com مكتوب بشكل صحيح.</td></tr>';
             }
         }
 
         function downloadExcel() {
             const table = document.getElementById("leadsTable");
-            const wb = XLSX.utils.table_to_book(table, { sheet: "Sales Leads" });
-            XLSX.writeFile(wb, "Park_Inn_Leads.xlsx");
+            const wb = XLSX.utils.table_to_book(table, { sheet: "Leads" });
+            XLSX.writeFile(wb, "Ahmad_Leads_Report.xlsx");
         }
     </script>
 </body>
