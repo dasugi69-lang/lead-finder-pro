@@ -3,130 +3,122 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Lead Finder App</title>
+    <title>Lead Finder Pro</title>
+    
+    <link rel="manifest" href='data:application/manifest+json,{"name":"Lead Finder Pro","short_name":"LeadFinder","start_url":".","display":"standalone","background_color":"#0b0f1a","theme_color":"#2563eb","icons":[{"src":"https://cdn-icons-png.flaticon.com/512/2913/2913990.png","sizes":"512x512","type":"image/png"}]}'>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
+    
     <style>
         body { 
             font-family: 'Cairo', sans-serif; 
             color: white; 
             -webkit-tap-highlight-color: transparent;
-            /* إضافة صورة الخلفية هنا */
-            background-image: url('https://images.unsplash.com/photo-1599675931131-7b9525a75107?q=80&w=2000');
+            /* استخدام صورة خلفية من رابط موثوق وسريع التحميل */
+            background-image: url('https://images.pexels.com/photos/271639/pexels-photo-271639.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
-            background-color: #0b0f1a; /* لون احتياطي */
+            background-color: #0b0f1a;
         }
         
-        /* طبقة تظليل فوق الصورة لضمان وضوح النص */
+        /* طبقة تظليل داكنة قوية لضمان ظهور المحتوى بوضوح */
         body::before {
             content: "";
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(11, 15, 26, 0.85); /* تظليل داكن */
+            background: linear-gradient(180deg, rgba(15, 23, 42, 0.75) 0%, rgba(15, 23, 42, 0.92) 100%);
             z-index: -1;
         }
 
+        .glass-card {
+            background: rgba(255, 255, 255, 0.08); 
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 2rem;
+        }
+
         .bottom-nav { 
-            background: rgba(15, 23, 42, 0.6); 
+            background: rgba(15, 23, 42, 0.85); 
             backdrop-filter: blur(20px); 
             -webkit-backdrop-filter: blur(20px);
-            border-top: 1px solid rgba(255,255,255,0.05); 
+            border-top: 1px solid rgba(255,255,255,0.1); 
         }
-        
-        /* تأثير البطاقات الزجاجية */
-        .glass-card {
-            background: rgba(30, 41, 59, 0.4); 
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.05);
-            transition: all 0.3s ease;
+
+        input {
+            background: rgba(15, 23, 42, 0.6) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            color: white !important;
         }
-        
-        .action-card { transition: all 0.3s ease; }
-        .action-card:active { transform: scale(0.95); background: rgba(59, 130, 246, 0.3); }
-        
-        input::placeholder { color: #64748b; }
-        
-        /* تخصيص حقل الإدخال ليتناسب مع الخلفية الزجاجية */
-        #companyInput {
-            background: rgba(15, 23, 42, 0.5);
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
+
+        .btn-glow {
+            background: linear-gradient(90deg, #2563eb 0%, #1d4ed8 100%);
+            box-shadow: 0 8px 15px -5px rgba(37, 99, 235, 0.5);
         }
     </style>
 </head>
-<body class="pb-24 min-h-screen">
+<body class="pb-28 min-h-screen">
 
-    <header class="p-6 pt-12 text-right relative z-10">
-        <div class="flex justify-between items-center mb-2">
-            <span class="bg-blue-600 text-[10px] font-bold px-2 py-0.5 rounded-full tracking-widest uppercase">Lead Finder PRO</span>
-            <div class="w-10 h-10 rounded-full bg-slate-800/80 border border-slate-700/50 flex items-center justify-center font-bold text-blue-500 backdrop-blur-sm">AD</div>
+    <header class="p-8 pt-16 text-right relative z-10">
+        <div class="flex justify-between items-center mb-6">
+            <span class="bg-blue-600 px-3 py-1 rounded-full text-[10px] font-bold tracking-widest">LEAD FINDER PRO</span>
+            <div class="w-12 h-12 rounded-2xl bg-blue-500/20 border border-blue-500/30 flex items-center justify-center font-bold text-blue-400">AD</div>
         </div>
-        <h1 class="text-3xl font-extrabold tracking-tight text-white">مرحباً <span class="text-blue-500">أحمد</span></h1>
-        <p class="text-slate-300 text-sm">جاهز لصيد العملاء لـ Park Inn؟</p>
+        <h1 class="text-4xl font-extrabold text-white">رادار المبيعات</h1>
+        <p class="text-slate-300 text-sm mt-1 italic">خاص بصديقي أحمد ديسوقي</p>
     </header>
 
-    <section class="px-6 mb-8 relative z-10">
-        <div class="relative group">
-            <input type="text" id="companyInput" placeholder="أدخل اسم الشركة (مثلاً: aramco.com)" 
-                   class="w-full border border-slate-700/50 rounded-2xl py-5 px-6 outline-none focus:border-blue-500 transition-all text-lg font-medium text-white shadow-inner">
-            <button onclick="globalSearch()" class="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white py-5 rounded-2xl font-extrabold text-lg shadow-xl shadow-blue-900/30 active:scale-95 transition-all btn-glow">
-                بدء البحث الذكي 🚀
+    <section class="px-6 mb-8 relative z-10 text-right">
+        <div class="glass-card p-5">
+            <label class="block text-xs font-bold text-blue-400 mb-2 px-1">نطاق الشركة (Domain)</label>
+            <input type="text" id="companyInput" placeholder="مثال: saudia.com" 
+                   class="w-full rounded-2xl py-5 px-6 outline-none focus:border-blue-500 transition-all text-lg font-medium">
+            <button onclick="globalSearch()" class="w-full mt-4 btn-glow text-white py-5 rounded-2xl font-extrabold text-lg active:scale-95 transition-all">
+                بدء الاستهداف الذكي 🛰️
             </button>
         </div>
     </section>
 
     <section class="px-6 relative z-10">
-        <h2 class="text-slate-300 text-xs font-bold uppercase tracking-widest mb-4 pr-2 text-right opacity-80">أدوات الوصول السريع</h2>
         <div class="grid grid-cols-2 gap-4">
-            
-            <div onclick="searchLinkedIn('Procurement Manager')" class="glass-card action-card p-6 rounded-3xl flex flex-col items-center text-center cursor-pointer">
-                <div class="w-12 h-12 bg-blue-600/20 rounded-2xl flex items-center justify-center mb-4 text-blue-500 text-xl font-bold italic border border-blue-500/20">in</div>
-                <span class="text-sm font-bold text-white">مديرو مشتريات</span>
+            <div onclick="searchLinkedIn('Procurement OR Purchasing Manager')" class="glass-card p-6 flex flex-col items-center text-center active:scale-90 transition-transform">
+                <div class="w-12 h-12 bg-blue-600/20 rounded-xl flex items-center justify-center mb-3 text-blue-400 font-black">in</div>
+                <span class="text-xs font-bold">المشتريات</span>
             </div>
-
-            <div onclick="searchLinkedIn('Travel Coordinator')" class="glass-card action-card p-6 rounded-3xl flex flex-col items-center text-center cursor-pointer">
-                <div class="w-12 h-12 bg-green-600/20 rounded-2xl flex items-center justify-center mb-4 text-green-500 text-xl border border-green-500/20">✈️</div>
-                <span class="text-sm font-bold text-white">مسؤولو سفر</span>
+            <div onclick="searchLinkedIn('Travel OR HR OR General Services')" class="glass-card p-6 flex flex-col items-center text-center active:scale-90 transition-transform">
+                <div class="w-12 h-12 bg-green-600/20 rounded-xl flex items-center justify-center mb-3 text-green-400">✈️</div>
+                <span class="text-xs font-bold">منسقو السفر</span>
             </div>
-
-            <div onclick="searchEmails()" class="glass-card action-card p-6 rounded-3xl flex flex-col items-center text-center cursor-pointer">
-                <div class="w-12 h-12 bg-purple-600/20 rounded-2xl flex items-center justify-center mb-4 text-purple-500 text-xl border border-purple-500/20">📧</div>
-                <span class="text-sm font-bold text-white">صياد الإيميلات</span>
+            <div onclick="searchEmails()" class="glass-card p-6 flex flex-col items-center text-center active:scale-90 transition-transform">
+                <div class="w-12 h-12 bg-purple-600/20 rounded-xl flex items-center justify-center mb-3 text-purple-400">📧</div>
+                <span class="text-xs font-bold">صائد الإيميلات</span>
             </div>
-
-            <div onclick="window.location.reload()" class="glass-card action-card p-6 rounded-3xl flex flex-col items-center text-center cursor-pointer">
-                <div class="w-12 h-12 bg-slate-600/20 rounded-2xl flex items-center justify-center mb-4 text-slate-400 text-xl border border-slate-700/50">🔄</div>
-                <span class="text-sm font-bold text-white">تحديث الرادار</span>
+            <div onclick="window.location.reload()" class="glass-card p-6 flex flex-col items-center text-center active:scale-90 transition-transform">
+                <div class="w-12 h-12 bg-slate-600/20 rounded-xl flex items-center justify-center mb-3 text-slate-300">🔄</div>
+                <span class="text-xs font-bold">تحديث</span>
             </div>
-
         </div>
     </section>
 
-    <nav class="bottom-nav fixed bottom-0 left-0 right-0 px-8 py-4 flex justify-between items-center z-50 rounded-t-3xl shadow-2xl">
+    <nav class="bottom-nav fixed bottom-0 left-0 right-0 px-10 py-6 flex justify-between items-center z-50 rounded-t-[2.5rem] shadow-2xl">
         <button class="flex flex-col items-center gap-1 text-blue-500">
             <span class="text-2xl">🏠</span>
-            <span class="text-[10px] font-bold">الرئيسية</span>
+            <span class="text-[10px] font-bold uppercase tracking-widest">الرئيسية</span>
         </button>
-        <button onclick="alert('خاص بصديقي أحمد ديسوقي - 2026')" class="flex flex-col items-center gap-1 text-slate-400 opacity-70">
+        <button onclick="alert('Park Inn Jeddah Tool V2.1')" class="flex flex-col items-center gap-1 text-slate-500">
             <span class="text-2xl">📊</span>
-            <span class="text-[10px] font-bold">التقارير</span>
-        </button>
-        <button class="flex flex-col items-center gap-1 text-slate-400 opacity-70">
-            <span class="text-2xl">👤</span>
-            <span class="text-[10px] font-bold">الملف</span>
+            <span class="text-[10px] font-bold uppercase tracking-widest">البيانات</span>
         </button>
     </nav>
 
     <script>
         function getCompany() {
             const domain = document.getElementById('companyInput').value.trim();
-            if(!domain) {
-                alert('يرجى كتابة اسم الشركة أولاً (مثلاً: aramco.com)');
-                return null;
-            }
+            if(!domain) { alert('صديقي أحمد، يرجى كتابة الدومين أولاً'); return null; }
             return domain;
         }
 
